@@ -10,6 +10,10 @@
 #include <iomanip>
 #include <sstream>
 
+void movement_checker_maze1(char wall);
+void movement_checker_maze2(char wall);
+void movement_checker_maze3(char wall);
+void movement_checker_maze3E(char wall);
 using namespace std;
 
 double  ElapsedTime;
@@ -58,7 +62,7 @@ bool plateJ = false;
 bool clearevent1 = false;
 bool clearevent2 = false;
 bool clearevent3 = false;
-
+bool playmusic = false;
 int mazelevel = 0;
 
 void renderMapOpenTrap1();
@@ -83,8 +87,7 @@ Console console(90, 21, "SP1 Framework");
 //--------------------------------------------------------------
 void init(void)
 {
-	MusicInit();
-	MusicPlay("tacos", "repeat");
+	
 	//g_dBounceTime = ElapsedTime + 0.125;
 		// Set precision for floating point output
 	ElapsedTime = 0.0;
@@ -102,6 +105,8 @@ void init(void)
 	Char.pointer.X = 31;
 	Char.pointer.Y = 10;
 	Char.mainmenu = false;
+
+
 }
 //--------------------------------------------------------------
 // Purpose  : Reset before exiting the program
@@ -193,15 +198,17 @@ void loadscreen()
 
 void splashScreenWait()    // waits for time to pass in splash screen
 {
+
+	MusicInit();
+	MusicPlay("tacos", "repeat");
+
 	g_eGameState = S_GAME;
 }
 
 void gameplay()            // gameplay logic
 {
-
 	processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
 	moveCharacter();    // moves the character, collision detection, physics, etc
-						// sound can be played here too.
 }
 
 char scanMap1(char wall[20][70])
@@ -623,8 +630,7 @@ void moveCharacter()
 	// providing a beep sound whenver we shift the characterj
 
 	// maze 2 e special skills "blink" 	// J + direction 
-	if (mazelevel == 1 && eventactivate2 == true && clearevent2 == false)
-	{
+
 		if (KeyPressed[K_JUMP] && KeyPressed[K_RIGHT] && Char.character.X < 68)
 		{
 			int characterlocationY = Char.character.Y - 1;
@@ -681,7 +687,7 @@ void moveCharacter()
 				}
 			}
 		}
-	}
+	
 
 	if (KeyPressed[K_UP] && Char.character.Y > 2)
 	{
@@ -692,23 +698,12 @@ void moveCharacter()
 		//for maze 1
 		if (mazelevel == 0)
 		{
-
 			if (wall[characterlocationY][characterlocationX] == ' ' || wall[characterlocationY][characterlocationX] == 'V' || wall[characterlocationY][characterlocationX] == 's' || wall[characterlocationY][characterlocationX] == 'S')
 			{
 				Char.character.Y--;
 				somethinghappened = true;
-				if (wall[characterlocationY][characterlocationX] == 's')
-				{
-					Char.character.X = 1;
-					Char.character.Y = 14;
-				}
-				if (wall[characterlocationY][characterlocationX] == 'V')
-				{
-					opentrap1 = false;
-					renderGame();
-				}
+				movement_checker_maze1(wall[characterlocationY][characterlocationX]);
 			}
-
 		}
 		//for maze 2
 		if (mazelevel == 1)
@@ -717,42 +712,7 @@ void moveCharacter()
 			{
 				Char.character.Y--;
 				somethinghappened = true;
-				if (wall[characterlocationY][characterlocationX] == 'E')
-				{
-					Char.character.X = 0;
-					Char.character.Y = 2;
-					eventactivate2 = true;
-					renderGame();
-				}
-				if (wall[characterlocationY][characterlocationX] == 'V')
-				{
-					opentrap2v = true;
-					renderGame();
-				}
-				if (wall[characterlocationY][characterlocationX] == 'O')
-				{
-					opentrap2o = true;
-					renderGame();
-				}
-				if (eventactivate2 == true)
-				{
-					if (wall[characterlocationY][characterlocationX] == 'X')
-					{
-						opentrap2 = true;
-						renderGame();
-					}
-				}
-				if (wall[characterlocationY][characterlocationX] == 'C')
-				{
-					opendoor = true;
-					renderGame();
-				}
-				if (wall[characterlocationY][characterlocationX] == 'R')
-				{
-					Char.character.X = 57;
-					Char.character.Y = 3;
-				}
-
+				movement_checker_maze2(wall[characterlocationY][characterlocationX]);
 			}
 		}
 		if (mazelevel == 2)
@@ -768,81 +728,7 @@ void moveCharacter()
 				{
 					Char.character.Y--;
 					somethinghappened = true;
-					{
-						if (wall[characterlocationY][characterlocationX] == 'L')
-						{
-							Char.character.X = 52;
-							Char.character.Y = 2;
-						}
-						if (wall[characterlocationY][characterlocationX] == 'V')
-						{
-							Char.character.X = 32;
-							Char.character.Y = 2;
-						}
-						if (wall[characterlocationY][characterlocationX] == 'N')
-						{
-							Char.character.X = 31;
-							Char.character.Y = 2;
-						}
-						if (wall[characterlocationY][characterlocationX] == 'M')
-						{
-							Char.character.X = 53;
-							Char.character.Y = 2;
-						}
-						if (wall[characterlocationY][characterlocationX] == 'U')
-						{
-							Char.character.X = 55;
-							Char.character.Y = 9;
-						}
-						if (wall[characterlocationY][characterlocationX] == 'H')
-						{
-							Char.character.X = 18;
-							Char.character.Y = 10;
-						}
-						if (wall[characterlocationY][characterlocationX] == 'X')
-						{
-							Char.character.X = 38;
-							Char.character.Y = 15;
-						}
-						if (wall[characterlocationY][characterlocationX] == 'O')
-						{
-							Char.character.X = 26;
-							Char.character.Y = 12;
-						}
-						if (wall[characterlocationY][characterlocationX] == 'C')
-						{
-							Char.character.X = 25;
-							Char.character.Y = 9;
-						}
-						if (wall[characterlocationY][characterlocationX] == 'P')
-						{
-							Char.character.X = 43;
-							Char.character.Y = 9;
-						}
-						if (wall[characterlocationY][characterlocationX] == 'R')
-						{
-							Char.character.X = 21;
-							Char.character.Y = 9;
-						}
-						if (wall[characterlocationY][characterlocationX] == 'W')
-						{
-							plateW = true;
-							renderGame();
-						}
-						if (wall[characterlocationY][characterlocationX] == 'K')
-						{
-							plateY = false;
-							plateK = true;
-							renderGame();
-						}
-						if (wall[characterlocationY][characterlocationX] == 'E')
-						{
-							Char.character.X = 0;
-							Char.character.Y = 2;
-							eventactivate3 = true;
-							renderGame();
-						}
-					}
+					movement_checker_maze3(wall[characterlocationY][characterlocationX]);
 				}
 			}
 			if ((eventactivate3 == true) && (clearevent3 == false))
@@ -859,69 +745,7 @@ void moveCharacter()
 				{
 					Char.character.Y--;
 					somethinghappened = true;
-					{
-						if (wall[characterlocationY][characterlocationX] == 'S')
-						{
-
-
-							Char.character.X = 1;
-							Char.character.Y = 2;
-
-
-
-						}
-						if (wall[characterlocationY][characterlocationX] == 'H')
-						{
-							plateH = true;
-							renderGame();
-						}
-						if (wall[characterlocationY][characterlocationX] == 'A')
-						{
-							plateU = false;
-							renderGame();
-						}
-						if (wall[characterlocationY][characterlocationX] == '1')
-						{
-							plateH = false;
-							renderGame();
-						}
-						if (wall[characterlocationY][characterlocationX] == 'C')
-						{
-							plateC = true;
-							renderGame();
-						}
-						if (wall[characterlocationY][characterlocationX] == 'W')
-						{
-							plateW3 = true;
-							renderGame();
-						}
-						if (wall[characterlocationY][characterlocationX] == 'L')
-						{
-							Char.character.X = 47;
-							Char.character.Y = 12;
-						}
-						if (wall[characterlocationY][characterlocationX] == 'F')
-						{
-							plateP = false;
-							renderGame();
-						}
-						if (wall[characterlocationY][characterlocationX] == 'R')
-						{
-							plateR = true;
-							renderGame();
-						}
-						if (wall[characterlocationY][characterlocationX] == 'D')
-						{
-							plateD = true;
-							renderGame();
-						}
-						if (wall[characterlocationY][characterlocationX] == 'M')
-						{
-							plateM = true;
-							renderGame();
-						}
-
-					}
+					movement_checker_maze3E(wall[characterlocationY][characterlocationX]);
 				}
 			}
 		}
@@ -941,24 +765,7 @@ void moveCharacter()
 			{
 				Char.character.X--;
 				somethinghappened = true;
-				if (wall[characterlocationY][characterlocationX] == 'E')
-				{
-					Char.character.X = 0;
-					Char.character.Y = 2;
-					eventactivate1 = true;
-					renderGame();
-				}
-				if (wall[characterlocationY][characterlocationX] == 's')
-				{
-					Char.character.X = 1;
-					Char.character.Y = 14;
-				}
-				if (wall[characterlocationY][characterlocationX] == 'V')
-				{
-					opentrap1 = false;
-					renderGame();
-				}
-
+				movement_checker_maze1(wall[characterlocationY][characterlocationX]);
 			}
 		}
 		//for maze 2
@@ -971,21 +778,7 @@ void moveCharacter()
 			{
 				Char.character.X--;
 				somethinghappened = true;
-				if (wall[characterlocationY][characterlocationX] == 'R')
-				{
-					Char.character.X = 57;
-					Char.character.Y = 3;
-				}
-				if (wall[characterlocationY][characterlocationX] == 'C')
-				{
-					opendoor = true;
-					renderGame();
-				}
-				if (wall[characterlocationY][characterlocationX] == 'B')
-				{
-					opendoor = false;
-					renderGame();
-				}
+				movement_checker_maze2(wall[characterlocationY][characterlocationX]);
 			}
 
 		}
@@ -1002,72 +795,7 @@ void moveCharacter()
 				{
 					Char.character.X--;
 					somethinghappened = true;
-
-					if (wall[characterlocationY][characterlocationX] == 'L')
-					{
-						Char.character.X = 52;
-						Char.character.Y = 2;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'N')
-					{
-						Char.character.X = 31;
-						Char.character.Y = 2;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'Q')
-					{
-						Char.character.X = 18;
-						Char.character.Y = 9;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'M')
-					{
-						Char.character.X = 53;
-						Char.character.Y = 2;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'U')
-					{
-						Char.character.X = 55;
-						Char.character.Y = 9;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'D')
-					{
-						Char.character.X = 42;
-						Char.character.Y = 13;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'P')
-					{
-						Char.character.X = 43;
-						Char.character.Y = 9;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'O')
-					{
-						Char.character.X = 26;
-						Char.character.Y = 12;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'C')
-					{
-						Char.character.X = 25;
-						Char.character.Y = 9;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'R')
-					{
-						Char.character.X = 21;
-						Char.character.Y = 9;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'H')
-					{
-						Char.character.X = 18;
-						Char.character.Y = 10;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'X')
-					{
-						Char.character.X = 38;
-						Char.character.Y = 15;
-					}
-					if (wall[characterlocationY][characterlocationX] == '4')
-					{
-						plateW = false;
-						renderGame();
-					}
+					movement_checker_maze3(wall[characterlocationY][characterlocationX]);
 				}
 			}
 			if ((eventactivate3 == true) && (clearevent3 == false))
@@ -1084,63 +812,7 @@ void moveCharacter()
 				{
 					Char.character.X--;
 					somethinghappened = true;
-					if (wall[characterlocationY][characterlocationX] == 'S')
-					{
-
-						Char.character.X = 1;
-						Char.character.Y = 2;
-
-					}
-					if (wall[characterlocationY][characterlocationX] == '1')
-					{
-						plateH = false;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == 'C')
-					{
-						plateC = true;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == 'F')
-					{
-						plateP = false;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == 'R')
-					{
-						plateR = true;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == 'P')
-					{
-						plateP = true;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == 'G')
-					{
-						plateG = true;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == 'F')
-					{
-						plateP = false;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == 'U')
-					{
-						plateU = true;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == 'X')
-					{
-						plateX = true;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == 'E')
-					{
-						plateE = true;
-						renderGame();
-					}
+					movement_checker_maze3E(wall[characterlocationY][characterlocationX]);
 				}
 			}
 		}
@@ -1159,11 +831,7 @@ void moveCharacter()
 			{
 				Char.character.Y++;
 				somethinghappened = true;
-				if (wall[characterlocationY][characterlocationX] == 'X')
-				{
-					opentrap1 = true;
-					renderGame();
-				}
+				movement_checker_maze1(wall[characterlocationY][characterlocationX]);
 			}
 		}
 		//for maze 2
@@ -1174,26 +842,7 @@ void moveCharacter()
 			{
 				Char.character.Y++;
 				somethinghappened = true;
-				if (wall[characterlocationY][characterlocationX] == 'C')
-				{
-					opendoor = true;
-					renderGame();
-				}
-				if (wall[characterlocationY][characterlocationX] == 'B')
-				{
-					opendoor = false;
-					renderGame();
-				}
-				if (wall[characterlocationY][characterlocationX] == 'R')
-				{
-					Char.character.X = 57;
-					Char.character.Y = 3;
-				}
-				if (wall[characterlocationY][characterlocationX] == 'X')
-				{
-					opentrap2 = true;
-					renderGame();
-				}
+				movement_checker_maze2(wall[characterlocationY][characterlocationX]);
 			}
 		}
 		if (mazelevel == 2)
@@ -1209,77 +858,7 @@ void moveCharacter()
 				{
 					Char.character.Y++;
 					somethinghappened = true;
-					if (wall[characterlocationY][characterlocationX] == 'N')
-					{
-						Char.character.X = 31;
-						Char.character.Y = 2;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'Q')
-					{
-						Char.character.X = 18;
-						Char.character.Y = 9;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'M')
-					{
-						Char.character.X = 53;
-						Char.character.Y = 2;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'T')
-					{
-						Char.character.X = 55;
-						Char.character.Y = 8;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'U')
-					{
-						Char.character.X = 55;
-						Char.character.Y = 9;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'H')
-					{
-						Char.character.X = 18;
-						Char.character.Y = 10;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'Z')
-					{
-						Char.character.X = 20;
-						Char.character.Y = 9;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'R')
-					{
-						Char.character.X = 21;
-						Char.character.Y = 9;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'F')
-					{
-						Char.character.X = 12;
-						Char.character.Y = 13;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'O')
-					{
-						Char.character.X = 26;
-						Char.character.Y = 12;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'G')
-					{
-						Char.character.X = 41;
-						Char.character.Y = 9;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'P')
-					{
-						Char.character.X = 43;
-						Char.character.Y = 9;
-					}
-					if (wall[characterlocationY][characterlocationX] == '9')
-					{
-						Char.character.X = 53;
-						Char.character.Y = 13;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'y')
-					{
-						plateK = false;
-						plateY = true;
-						renderGame();
-					}
+					movement_checker_maze3(wall[characterlocationY][characterlocationX]);
 				}
 			}
 			if ((eventactivate3 == true) && (clearevent3 == false))
@@ -1294,97 +873,7 @@ void moveCharacter()
 				{
 					Char.character.Y++;
 					somethinghappened = true;
-					if (wall[characterlocationY][characterlocationX] == 'S')
-					{
-
-						Char.character.X = 1;
-						Char.character.Y = 2;
-
-					}
-					if (wall[characterlocationY][characterlocationX] == 'Y')
-					{
-						plateW3 = false;
-						Char.character.X = 30;
-						Char.character.Y = 7;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == 'T')
-					{
-						plateD = false;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == 'N')
-					{
-						plateN = true;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == 'J')
-					{
-						plateJ = true;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == 'W')
-					{
-						plateW3 = true;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == 'V')
-					{
-						Char.character.X = 67;
-						Char.character.Y = 10;
-
-					}
-					if (wall[characterlocationY][characterlocationX] == 'A')
-					{
-						plateU = false;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == 'y')
-					{
-						plateW3 = false;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == '2')
-					{
-						plateM = false;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == 'U')
-					{
-						plateU = true;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == 'H')
-					{
-						plateH = true;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == 'M')
-					{
-						plateM = true;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == '1')
-					{
-						plateH = false;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == 'l')
-					{
-						plateP = false;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == 'D')
-					{
-						plateD = true;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == 'E')
-					{
-						plateE = true;
-						renderGame();
-					}
-
+					movement_checker_maze3E(wall[characterlocationY][characterlocationX]);
 				}
 			}
 		}
@@ -1404,43 +893,19 @@ void moveCharacter()
 				|| wall[characterlocationY][characterlocationX] == 'E'
 				|| wall[characterlocationY][characterlocationX] == 's' || wall[characterlocationY][characterlocationX] == 'T')
 			{
-
 				Char.character.X++;
 				somethinghappened = true;
 				//going to maze 2
-				if (wall[characterlocationY][characterlocationX] == '2')
-				{
-					Char.character.X = 0;
-					Char.character.Y = 2;
-					mazelevel++;
-					renderGame();
-				}
-				// going to event maze
-				if (wall[characterlocationY][characterlocationX] == 'E')
-				{
-					Char.character.X = 0;
-					Char.character.Y = 2;
-					eventactivate1 = true;
-					renderGame();
-				}
-				if (wall[characterlocationY][characterlocationX] == 's')
-				{
-					Char.character.X = 1;
-					Char.character.Y = 14;
-				}
 				if (Char.character.Y == 13 && Char.character.X == 69)
 				{
 					Char.character.X = 33;
 					Char.character.Y = 2;
-
 					clearevent1 = true;
-
 					renderGame();
 				}
-				if (wall[characterlocationY][characterlocationX] == 'T')
+				else
 				{
-					Char.character.X = 60;
-					Char.character.Y = 12;
+					movement_checker_maze1(wall[characterlocationY][characterlocationX]);
 				}
 			}
 		}
@@ -1455,59 +920,16 @@ void moveCharacter()
 			{
 				Char.character.X++;
 				somethinghappened = true;
-				if (wall[characterlocationY][characterlocationX] == '3')
-				{
-					Char.character.X = 0;
-					Char.character.Y = 2;
-					mazelevel++;
-					renderGame();
-				}
-				if (wall[characterlocationY][characterlocationX] == 'O')
-				{
-					opentrap2o = true;
-					renderGame();
-				}
-				if (wall[characterlocationY][characterlocationX] == 'Y')
-				{
-					opentrap2y = true;
-					renderGame();
-				}
-				if (wall[characterlocationY][characterlocationX] == 'V')
-				{
-					opentrap2v = true;
-					renderGame();
-				}
-				if (wall[characterlocationY][characterlocationX] == 'K')
-				{
-					opentrap2k = true;
-					renderGame();
-				}
-				if (wall[characterlocationY][characterlocationX] == 'Z')
-				{
-					opentrap2z = true;
-					renderGame();
-				}
-				if (wall[characterlocationY][characterlocationX] == 'C')
-				{
-					opendoor = true;
-					renderGame();
-				}
-				if (wall[characterlocationY][characterlocationX] == 'B')
-				{
-					opendoor = false;
-					renderGame();
-				}
-				if (wall[characterlocationY][characterlocationX] == 'R')
-				{
-					Char.character.X = 57;
-					Char.character.Y = 3;
-				}
 				if (Char.character.Y == 2 && Char.character.X == 69)
 				{
 					Char.character.X = 7;
 					Char.character.Y = 16;
 					clearevent2 = true;
 					renderGame();
+				}
+				else
+				{
+					movement_checker_maze2(wall[characterlocationY][characterlocationX]);
 				}
 			}
 		}
@@ -1524,97 +946,7 @@ void moveCharacter()
 				{
 					Char.character.X++;
 					somethinghappened = true;
-					if (wall[characterlocationY][characterlocationX] == 'V')
-					{
-						Char.character.X = 32;
-						Char.character.Y = 2;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'N')
-					{
-						Char.character.X = 31;
-						Char.character.Y = 2;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'Q')
-					{
-						Char.character.X = 18;
-						Char.character.Y = 9;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'M')
-					{
-						Char.character.X = 53;
-						Char.character.Y = 2;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'T')
-					{
-						Char.character.X = 55;
-						Char.character.Y = 8;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'U')
-					{
-						Char.character.X = 55;
-						Char.character.Y = 9;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'P')
-					{
-						Char.character.X = 43;
-						Char.character.Y = 9;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'I')
-					{
-						Char.character.X = 41;
-						Char.character.Y = 13;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'O')
-					{
-						Char.character.X = 26;
-						Char.character.Y = 12;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'G')
-					{
-						Char.character.X = 41;
-						Char.character.Y = 9;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'F')
-					{
-						Char.character.X = 12;
-						Char.character.Y = 13;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'A')
-					{
-						Char.character.X = 64;
-						Char.character.Y = 3;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'H')
-					{
-						Char.character.X = 18;
-						Char.character.Y = 10;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'Z')
-					{
-						Char.character.X = 20;
-						Char.character.Y = 9;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'W')
-					{
-						plateW = true;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == 'R')
-					{
-						Char.character.X = 21;
-						Char.character.Y = 9;
-					}
-					if (wall[characterlocationY][characterlocationX] == '4')
-					{
-						plateW = false;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == 'y')
-					{
-						plateK = false;
-						plateY = true;
-						renderGame();
-					}
+					movement_checker_maze3(wall[characterlocationY][characterlocationX]);
 				}
 			}
 			if ((eventactivate3 == true) && (clearevent3 == false))
@@ -1630,61 +962,6 @@ void moveCharacter()
 				{
 					Char.character.X++;
 					somethinghappened = true;
-					if (wall[characterlocationY][characterlocationX] == 'S')
-					{
-
-						Char.character.X = 1;
-						Char.character.Y = 2;
-
-					}
-					if (wall[characterlocationY][characterlocationX] == 'C')
-					{
-						plateC = true;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == 'y')
-					{
-						plateW3 = false;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == 'A')
-					{
-						plateU = false;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == 'P')
-					{
-						plateP = true;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == 'K')
-					{
-						Char.character.X = 66;
-						Char.character.Y = 18;
-					}
-					if (wall[characterlocationY][characterlocationX] == 'X')
-					{
-						plateX = true;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == 'V')
-					{
-						Char.character.X = 67;
-						Char.character.Y = 10;
-
-					}
-					if (wall[characterlocationY][characterlocationX] == 'B')
-					{
-						plateR = false;
-						renderGame();
-					}
-					if (wall[characterlocationY][characterlocationX] == 'Y')
-					{
-						plateW3 = false;
-						Char.character.X = 30;
-						Char.character.Y = 7;
-						renderGame();
-					}
 					if (Char.character.Y == 7 && Char.character.X == 69)
 					{
 						Char.character.X = 1;
@@ -1692,21 +969,19 @@ void moveCharacter()
 						clearevent3 = true;
 						renderGame();
 					}
+					else
+					{
+						movement_checker_maze3E(wall[characterlocationY][characterlocationX]);
+					}
 				}
-
 			}
-
 		}
-
 	}
-
-
 	if (KeyPressed[K_SPACE])
 	{
 		Char.m_bActive = !Char.m_bActive;
 		somethinghappened = true;
 	}
-
 	if (somethinghappened)
 	{
 		// set the bounce time to some time in the future to prevent accidental triggers
@@ -1768,8 +1043,6 @@ void renderMapEventClear1()
 	}
 }
 //loading of 2D
-
-
 
 
 // opening event1 trap
@@ -1987,6 +1260,8 @@ void rendermainmenu()
 	if (KeyPressed[K_RETURN] && Char.pointer.Y == 13)
 	{
 		Char.mainmenu = true;
+		MusicStop("tacos");
+		MusicPlay("mazelevel1", "repeat");
 		renderGame();
 	}
 	if (KeyPressed[K_RETURN] && Char.pointer.Y == 16)
@@ -1998,7 +1273,6 @@ void rendermainmenu()
 void renderGame()
 {
 	//open maze1E trap
-
 	if (Char.mainmenu == false)
 	{
 		rendermainmenu();
@@ -2035,7 +1309,6 @@ void renderGame()
 			renderMap();
 		}
 		//update character location
-
 		renderCharacter();
 	}
 }
@@ -2359,4 +1632,455 @@ void processUserInput()
 	// quits the game if player hits the escape key
 	if (KeyPressed[K_ESCAPE])
 		escgame = true;
+}
+
+void movement_checker_maze1(char wall)
+{
+	switch (wall)
+	{
+	case 's':
+	{
+		Char.character.X = 1;
+		Char.character.Y = 14;
+		break;
+	}
+	case 'V':
+	{
+		opentrap1 = false;
+		renderGame();
+		break;
+	}
+	case 'X':
+	{
+		opentrap1 = true;
+		renderGame();
+		break;
+	}
+	case '2':
+	{
+		Char.character.X = 0;
+		Char.character.Y = 2;
+		mazelevel++;
+		MusicStop("mazelevel1");
+		MusicPlay("mazelevel3", "repeat");
+		renderGame();
+		break;
+	}
+	case 'E':
+	{
+		Char.character.X = 0;
+		Char.character.Y = 2;
+		eventactivate1 = true;
+		renderGame();
+		break;
+	}
+	case 'T':
+	{
+		Char.character.X = 60;
+		Char.character.Y = 12;
+		break;
+	}
+	}
+}
+void movement_checker_maze2(char wall)
+{
+	switch (wall)
+	{
+	case 'E':
+	{
+		Char.character.X = 0;
+		Char.character.Y = 2;
+		eventactivate2 = true;
+		renderGame();
+		break;
+	}
+	case 'V':
+	{
+		opentrap2v = true;
+		renderGame();
+		break;
+	}
+	case 'X':
+	{
+		opentrap2 = true;
+		renderGame();
+		break;
+	}
+	case 'C':
+	{
+		opendoor = true;
+		renderGame();
+		break;
+	}
+	case 'R':
+	{
+		Char.character.X = 57;
+		Char.character.Y = 3;
+		break;
+	}
+	case 'B':
+	{
+		opendoor = false;
+		renderGame();
+		break;
+	}
+	case '3':
+	{
+		Char.character.X = 0;
+		Char.character.Y = 2;
+		mazelevel++;
+
+		MusicStop("mazelevel3");
+		MusicPlay("die", "repeat");
+
+		renderGame();
+		break;
+	}
+	case 'O':
+	{
+		opentrap2o = true;
+		renderGame();
+		break;
+	}
+	case 'Y':
+	{
+		opentrap2y = true;
+		renderGame();
+		break;
+	}
+	case 'K':
+	{
+		opentrap2k = true;
+		renderGame();
+		break;
+	}
+	case 'Z':
+	{
+		opentrap2z = true;
+		renderGame();
+		break;
+	}
+	}
+}
+void movement_checker_maze3(char wall)
+{
+	switch (wall)
+	{
+	case 'V':
+	{
+		Char.character.X = 32;
+		Char.character.Y = 2;
+		break;
+	}
+	case 'N':
+	{
+		Char.character.X = 31;
+		Char.character.Y = 2;
+		break;
+	}
+	case 'Q':
+	{
+		Char.character.X = 18;
+		Char.character.Y = 9;
+		break;
+	}
+	case 'M':
+	{
+		Char.character.X = 53;
+		Char.character.Y = 2;
+		break;
+	}
+	case 'T':
+	{
+		Char.character.X = 55;
+		Char.character.Y = 8;
+		break;
+	}
+	case 'U':
+	{
+		Char.character.X = 55;
+		Char.character.Y = 9;
+		break;
+	}
+	case 'P':
+	{
+		Char.character.X = 43;
+		Char.character.Y = 9;
+	}
+	case 'I':
+	{
+		Char.character.X = 41;
+		Char.character.Y = 13;
+		break;
+	}
+	case 'O':
+	{
+		Char.character.X = 26;
+		Char.character.Y = 12;
+		break;
+	}
+	case 'G':
+	{
+		Char.character.X = 41;
+		Char.character.Y = 9;
+		break;
+	}
+	case 'F':
+	{
+		Char.character.X = 12;
+		Char.character.Y = 13;
+	}
+	case 'A':
+	{
+		Char.character.X = 64;
+		Char.character.Y = 3;
+		break;
+	}
+	case 'H':
+	{
+		Char.character.X = 18;
+		Char.character.Y = 10;
+		break;
+	}
+	case 'Z':
+	{
+		Char.character.X = 20;
+		Char.character.Y = 9;
+		break;
+	}
+	case 'W':
+	{
+		plateW = true;
+		renderGame();
+		break;
+	}
+	case 'R':
+	{
+		Char.character.X = 21;
+		Char.character.Y = 9;
+		break;
+	}
+	case '4':
+	{
+		plateW = false;
+		renderGame();
+		break;
+	}
+	case 'y':
+	{
+		plateK = false;
+		plateY = true;
+		renderGame();
+		break;
+	}
+	case '9':
+	{
+		Char.character.X = 53;
+		Char.character.Y = 13;
+		break;
+	}
+	case 'X':
+	{
+		Char.character.X = 38;
+		Char.character.Y = 15;
+		break;
+	}
+	case 'C':
+	{
+		Char.character.X = 25;
+		Char.character.Y = 9;
+		break;
+	}
+	case 'D':
+	{
+		Char.character.X = 42;
+		Char.character.Y = 13;
+		break;
+	}
+	case 'E':
+	{
+		Char.character.X = 0;
+		Char.character.Y = 2;
+		eventactivate3 = true;
+		renderGame();
+		break;
+	}
+	case 'K':
+	{
+		plateY = false;
+		plateK = true;
+		renderGame();
+		break;
+	}
+	case 'L':
+	{
+		Char.character.X = 52;
+		Char.character.Y = 2;
+		break;
+	}
+	}
+}
+void movement_checker_maze3E(char wall)
+{
+	switch (wall)
+	{
+	case 'Y':
+	{
+		plateW3 = false;
+		Char.character.X = 30;
+		Char.character.Y = 7;
+		renderGame();
+		break;
+	}
+	case 'B':
+	{
+		plateR = false;
+		renderGame();
+		break;
+	}
+	case 'V':
+	{
+		Char.character.X = 67;
+		Char.character.Y = 10;
+		break;
+	}
+	case 'X':
+	{
+		plateX = true;
+		renderGame();
+		break;
+	}
+	case 'K':
+	{
+		Char.character.X = 66;
+		Char.character.Y = 18;
+		break;
+	}
+	case 'P':
+	{
+		plateP = true;
+		renderGame();
+		break;
+	}
+	case 'A':
+	{
+		plateU = false;
+		renderGame();
+		break;
+	}
+	case 'y':
+	{
+		plateW3 = false;
+		renderGame();
+		break;
+	}
+	case 'C':
+	{
+		plateC = true;
+		renderGame();
+		break;
+	}
+	case 'S':
+	{
+		Char.character.X = 1;
+		Char.character.Y = 2;
+		break;
+	}
+	case 'E':
+	{
+		plateE = true;
+		renderGame();
+		break;
+	}
+	case 'D':
+	{
+		plateD = true;
+		renderGame();
+		break;
+	}
+	case 'I':
+	{
+		plateP = false;
+		renderGame();
+		break;
+	}
+	case '1':
+	{
+		plateH = false;
+		renderGame();
+		break;
+	}
+	case 'M':
+	{
+		plateM = true;
+		renderGame();
+		break;
+	}
+	case 'H':
+	{
+		plateH = true;
+		renderGame();
+		break;
+	}
+	case 'U':
+	{
+		plateU = true;
+		renderGame();
+		break;
+	}
+	case '2':
+	{
+		plateM = false;
+		renderGame();
+		break;
+	}
+	case 'W':
+	{
+		plateW3 = true;
+		renderGame();
+		break;
+	}
+	case 'J':
+	{
+		plateJ = true;
+		renderGame();
+		break;
+	}
+	case 'N':
+	{
+		plateN = true;
+		renderGame();
+		break;
+	}
+	case 'T':
+	{
+		plateD = false;
+		renderGame();
+		break;
+	}
+	case 'F':
+	{
+		plateP = false;
+		renderGame();
+		break;
+	}
+	case 'G':
+	{
+		plateG = true;
+		renderGame();
+		break;
+	}
+	case 'R':
+	{
+		plateR = true;
+		renderGame();
+		break;
+	}
+	case 'L':
+	{
+		Char.character.X = 47;
+		Char.character.Y = 12;
+		break;
+	}
+	}
 }

@@ -88,6 +88,7 @@
     <ClInclude Include="Framework\console.h" />
     <ClInclude Include="Framework\timer.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="checkingBool.h" />
     <ClInclude Include="mALL.h" />
   </ItemGroup>
   <ItemGroup>
@@ -103,10 +104,10 @@
     <Text Include="MAZE3E.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Media Include="83408_newgrounds_lol_u_.mp3" />
-    <Media Include="Domina Soundtrack - Gladius.mp3" />
-    <Media Include="Eric_Prydz_-_Opus_OUT_NOW-iRA82xLsb_w.mp3" />
-    <Media Include="Raining Tacos - Parry Gripp  BooneBum.mp3" />
+    <Media Include="BGM2%28Maze-Level1-special%29.mp3" />
+    <Media Include="BGM3%28Maze-level2-special%29.mp3" />
+    <Media Include="BGM1%28Game-Intro%29.mp3" />
+    <Media Include="BGM4.1%28Maze-Level3-special%29.mp3" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

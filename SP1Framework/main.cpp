@@ -40,7 +40,7 @@ void mainLoop( void )
         keyboard();                         // get keyboard input
         update(timer.getElapsedTime());   // update the game
         loadscreen();                           // render the graphics output to screen
-        timer.framelimit(frametime);   // Frame rate limiter. Limits each frame to a specified time in ms.      
+        timer.framelimit(frametime);   // Frame rate limiter. Limits each frame to a specified time in ms.     
     }    
 }
 

@@ -9,10 +9,10 @@ vector<mLoad> loadFiles;
 void MusicInit()
 {
 	mLoad load;
-	MusicLoad("Raining Tacos - Parry Gripp  BooneBum.mp3", "mpegvideo", "tacos", "100", &load);
-	MusicLoad("Domina Soundtrack - Gladius.mp3", "mpegvideo", "mazelevel1", "100", &load);
-	MusicLoad("Eric_Prydz_-_Opus_OUT_NOW-iRA82xLsb_w.mp3", "mpegvideo", "mazelevel3", "100", &load);
-	MusicLoad("83408_newgrounds_lol_u_.mp3", "mpegvideo", "die", "100", &load);
+	MusicLoad("BGM1(Game-Intro).mp3", "mpegvideo", "tacos", "100", &load);
+	MusicLoad("BGM2(Maze-Level1-special).mp3", "mpegvideo", "mazelevel1", "100", &load);
+	MusicLoad("BGM3(Maze-level2-special).mp3", "mpegvideo", "mazelevel3", "100", &load);
+	MusicLoad("BGM4.1(Maze-Level3-special).mp3", "mpegvideo", "die", "100", &load);
 	loadFiles.push_back(load);
 }
 bool MusicLoad(string file, string type, string alias, string initalvolume, mLoad* Returnfile)

@@ -12,6 +12,6 @@ struct mLoad
 	string alias = "";
 	int status;
 };
-bool MusicLoad(std::string file, std::string type, std::string alias, std::string initalvolume, mLoad* Returnfile);
+bool MusicLoad(string file, string type, string alias, string initalvolume, mLoad* Returnfile);
 
 
